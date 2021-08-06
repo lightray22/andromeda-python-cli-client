@@ -59,6 +59,9 @@ if __name__ == '__main__':
         if key[-1] == '@':
             key = key[:-1]
             value = open(value,'rb').read().strip()
+        elif key[-1] == '!':
+            key = key[:-1]
+            value = input("enter {}...".format(key)+os.linesep)
 
         if key[-1] == '%':
             key = key[:-1]
