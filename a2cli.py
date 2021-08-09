@@ -7,8 +7,11 @@
 import os, sys, requests, json
 
 def exithelp():
-    print("general usage: a2cli.py url app action [--$param value] [--$param@ file] [--$param% file [name]]\n"
-          " - param@ puts the content of the file in the parameter, param% uploads the file as a file, optionally with a new name\n"
+    print("general usage: a2cli.py url app action [--$param value] [--$param@ file] [--$param!] [--$param% file [name]] [--$param-]"+os.linesep+
+          "\t param@ puts the content of the file in the parameter"+os.linesep+
+          "\t param! will prompt interactively or read stdin for the parameter value"+os.linesep+
+          "\t param% gives the file path as a direct file input (optionally with a new name)"+os.linesep+
+          "\t param- will attach the stdin stream as a direct file input"+os.linesep+
           "get actions:   a2cli.py url server usage")
     sys.exit(1)
 
@@ -69,6 +72,8 @@ if __name__ == '__main__':
                 name = args[i]; i+=1
             else: name = os.path.basename(value)
             files[key] = (name,open(value,'rb'))
+        elif key[-1] == '-':
+            files[key[:-1]] = sys.stdin
         else: params[key] = value
 
     result = backend(url, app, action, params, files)
